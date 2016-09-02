@@ -14,6 +14,7 @@ function money()
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':account' => $_SESSION['account']]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
     echo $row['count'];
 }
 
@@ -25,10 +26,10 @@ function detail()
     $sql = "SELECT * FROM `detail` WHERE `name` = :account";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':account' => $_SESSION['account']]);
-//    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     }
+
     return $data;
 }
 
@@ -48,6 +49,7 @@ if (isset($_POST['logout'])) {
         <title>Bank</title>
     </head>
     <body>
+    <div>帳號：<?php echo $_SESSION['account'] ?></div>
     <div>目前餘額：<?php money(); ?></div>
         <form action="MysqlTrs.php" method="post">
             轉帳選擇: <select name="trs">
@@ -57,7 +59,9 @@ if (isset($_POST['logout'])) {
             輸入金額: <input type="text" name="money" value="" />
             <input type="submit" value="確認" />
         </form>
-    <br>
+        <form action="Game.php" method="post">
+            <input type="submit" name="logout" value="三字遊戲" />
+        </form>
         <form action="" method="post">
             <input type="submit" name="logout" value="登出" />
         </form>

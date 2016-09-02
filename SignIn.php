@@ -4,8 +4,8 @@
     </head>
     <body>
         <form action="MysqlCom.php" method="post">
-            Account: <input type="text" name="account" value="" />
-            Password: <input type="text" name="password" value="" />
+            Account: <input type="text" name="account" value=""  required/>
+            Password: <input type="text" name="password" value=""  required/>
             <input type="submit" value="Sign in" />
         </form>
         <form action="index.php" method="post">

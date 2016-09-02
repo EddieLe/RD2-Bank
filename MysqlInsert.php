@@ -3,6 +3,11 @@ require_once 'MyPDO.php';
 
 function create()
 {
+    if (!preg_match('/^[A-Za-z0-9]+$/', $_POST['account']) || !preg_match('/^[A-Za-z0-9]+$/', $_POST['password'])) {
+        echo "<script> alert('輸入不合法');</script>";
+        header("refresh:0, url=SignIn.php");
+        exit;
+    }
     $myPdo = new MyPDO();
     $pdo = $myPdo->pdoConnect;
 

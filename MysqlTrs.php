@@ -17,8 +17,19 @@ function trsMoney()
     $pdo->beginTransaction();
 
     if ($_POST['trs'] == 'out') {
+
+        $sql = "SELECT `count` FROM `accounts` WHERE `name` = :account";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':account' => $_SESSION['account']]);
+        $row = $stmt->fetchall(PDO::FETCH_ASSOC);
+        
+        if ($row[0]['count'] < $_POST['money'] ) {
+            echo "<script> alert('沒有足夠金額');</script>";
+            header("refresh:0, url=Bank.php");
+            exit;
+        }
+
         try {
-            echo 123;
             $sql = "SELECT `count` FROM `accounts` WHERE `name` = :account FOR UPDATE";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([':account' => $_SESSION['account']]);
