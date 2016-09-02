@@ -1,0 +1,22 @@
+create database Accounts default character set utf8;
+
+create table accounts
+(
+    id int auto_increment primary key,
+    name char(30) null,
+    password char(50) null,
+    count int null,
+    date timestamp
+) engine = InnoDB;
+
+
+create table detail
+(
+    id int auto_increment primary key,
+    name char(30) null,
+    total int null,
+    take int null,
+    save int null,
+    result int null,
+    date timestamp
+) engine = InnoDB;
