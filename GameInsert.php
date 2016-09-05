@@ -29,17 +29,51 @@ function gameInsert()
         header("refresh:0, url=Game.php");
         exit;
     }
-//    echo $_POST['one'];
-//    echo $_POST['two'];
-//    echo $_POST['three'];
-//    echo $_POST['four'];
-//    echo $_POST['five'];
-//    echo $_SESSION['account'];
-//    echo $_POST['pay'];
-//    exit;
 
-    $sql = "INSERT INTO `gameResult`(`one`, `two`, `three`, `four`, `five`, `pay`, `account`) 
-      VALUES (:one, :two, :three, :four, :five, :pay, :account)";
+    $pdo->beginTransaction();
+
+    $sql = "SELECT `count` FROM `accounts` WHERE `name` = :account";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':account' => $_SESSION['account']]);
+    $row = $stmt->fetchall(PDO::FETCH_ASSOC);
+
+    if ($row[0]['count'] < $_POST['money'] ) {
+        echo "<script> alert('沒有足夠金額');</script>";
+        header("refresh:0, url=Bank.php");
+        exit;
+    }
+
+    try {
+        $sql = "SELECT `count` FROM `accounts` WHERE `name` = :account FOR UPDATE";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':account' => $_SESSION['account']]);
+
+        //取出當下total
+        $row = $stmt->fetchall(PDO::FETCH_ASSOC);
+        $newTotal = $row[0]['count'];
+
+        $cmd = "UPDATE `accounts` SET `count` = `count` - :take WHERE `name` = :account";
+        $stmt = $pdo->prepare($cmd);
+        $stmt->execute([':take' => $_POST['pay'], ':account' => $_SESSION['account']]);
+
+        $cmd = "INSERT INTO `detail`(`name`, `total`, `play`, `result`) VALUES (:account, :total, :play, :result)";
+        $stmt = $pdo->prepare($cmd);
+        $stmt->execute([
+            ':play' => $_POST['pay'],
+            ':total' => $newTotal,
+            ':account' => $_SESSION['account'],
+            ':result' => $newTotal - $_POST['pay']
+        ]);
+
+        $pdo->commit();
+    } catch (Exception $e) {
+        $pdo->rollback();
+        echo 'Caught exception: ', $e->getMessage();
+    }
+
+
+    $sql = "INSERT INTO `gameResult`(`one`, `two`, `three`, `four`, `five`, `pay`, `result`, `account`, `result1`, `result2`) 
+      VALUES (:one, :two, :three, :four, :five, :pay, '無', :account, '無', '無')";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':one' => $_POST['one'],
         ':two' => $_POST['two'],

@@ -19,7 +19,7 @@ function resultInsert()
         ':endtime' => $_POST['end']
     ]);
 }
-//resultInsert();
+resultInsert();
 //header("location:Open.php");
 function comparison()
 {
@@ -38,50 +38,75 @@ function comparison()
             $result[] = $data[$i];
         }
     }
-//    var_dump($result);
     $oneResult = array($_POST['one'], $_POST['two'], $_POST['three']);
     $twoResult = array($_POST['two'], $_POST['three'], $_POST['four']);
     $threeResult = array($_POST['three'], $_POST['four'], $_POST['five']);
-//    var_dump($oneResult);
-//        var_dump($twoResult);
-//        var_dump($threeResult);
+
     echo $_POST['one'], $_POST['two'], $_POST['three'], $_POST['four'], $_POST['five'];
     for ($i = 0; $i < count($result); $i++) {
         echo $result[$i]['one'];
-        var_dump(in_array($result[$i]['one'],$oneResult));
+//        var_dump(in_array($result[$i]['one'],$oneResult));
         if (in_array($result[$i]['one'],$oneResult) && in_array($result[$i]['two'],$oneResult) && in_array($result[$i]['three'],$oneResult)) {
-            echo "中前三";
-            var_dump($result[$i]);
+            $sql = "UPDATE `gameResult` SET `result`= '中前三' WHERE `id` = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $result[$i]['id']]);
+            $totalResult[] = $result[$i];
         }
         if (in_array($result[$i]['two'],$twoResult) && in_array($result[$i]['three'],$twoResult) && in_array($result[$i]['four'],$twoResult)) {
-            echo "中中三";
-            var_dump($result[$i]);
+            $sql = "UPDATE `gameResult` SET `result1`= '中中三' WHERE `id` = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $result[$i]['id']]);
+            $totalResult[] = $result[$i];
         }
         if (in_array($result[$i]['three'],$threeResult) && in_array($result[$i]['four'],$threeResult) && in_array($result[$i]['five'],$threeResult)) {
-            echo "中後三";
-            var_dump($result[$i]);
+            $sql = "UPDATE `gameResult` SET `result2`= '中後三' WHERE `id` = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $result[$i]['id']]);
+            $totalResult[] = $result[$i];
         }
     }
-//    var_dump($result);
+var_dump($totalResult);
+    return $totalResult;
 }
-comparison();
 ?>
+
 <html>
 <head>
     <title>開獎結果</title>
 </head>
 <body>
 
-<form method="post" action="OpenResultInsert.php">
-    <input type="date" name="start" value="" placeholder="2014-09-18" required>
-    <input type="date" name="end" value="" placeholder="2014-09-18" required>
-    數字一: <input type="text" size="3" name="one" value="" readonly="readonly" required pattern="[0-9]{1}"/>
-    數字二：<input type="text" size="3" name="two" value="" readonly="readonly" required pattern="[0-9]{1}"/>
-    數字三：<input type="text" size="3" name="three" value="" readonly="readonly" required pattern="[0-9]{1}"/>
-    數字四：<input type="text" size="3" name="four" value="" readonly="readonly" required pattern="[0-9]{1}"/>
-    數字五：<input type="text" size="3" name="five" value="" readonly="readonly" required pattern="[0-9]{1}"/>
-    <input type="submit" value="確認" />
-</form>
+    <table width="1000" border="1">
+        <tr>
+            <td>注單編號</td>
+            <td>中獎人</td>
+            <td>數字一</td>
+            <td>數字二</td>
+            <td>數字三</td>
+            <td>數字四</td>
+            <td>數字五</td>
+            <td>下注金額</td>
+            <td colspan="3">開獎結果</td>
+            <td>時間</td>
+        </tr>
+        <?php $data = comparison();?>
+        <?php for ($i = 0; $i < count($data); $i++) :?>
+            <tr>
+                <td><?php echo $data[$i]['id']; ?></td>
+                <td><?php echo $data[$i]['account']; ?></td>
+                <td><?php echo $data[$i]['one']; ?></td>
+                <td><?php echo $data[$i]['two']; ?></td>
+                <td><?php echo $data[$i]['three']; ?></td>
+                <td><?php echo $data[$i]['four']; ?></td>
+                <td><?php echo $data[$i]['five']; ?></td>
+                <td><?php echo $data[$i]['pay']; ?></td>
+                <td Width="60"><?php echo $data[$i]['result']; ?></td>
+                <td Width="60"><?php echo $data[$i]['result1']; ?></td>
+                <td Width="60"><?php echo $data[$i]['result2']; ?></td>
+                <td><?php echo $data[$i]['date']; ?></td>
+            </tr>
+        <?php endfor; ?>
+    </table>
 <a href ="Open.php">上一頁</a>
 </body>
 </html>
