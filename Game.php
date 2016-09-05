@@ -5,6 +5,12 @@ session_start();
 if (!isset($_SESSION['account'])) {
     header("location:SignIn.php");
 }
+
+if ($_SESSION['account'] == 'root') {
+    header("location:Bank.php");
+    exit;
+}
+
 function money()
 {
     session_start();
@@ -49,9 +55,6 @@ function detail()
             數字四：<input type="text" size="3" name="four" value="" required pattern="[0-9]{1}"/>
             數字五：<input type="text" size="3" name="five" value="" required pattern="[0-9]{1}"/>
             <input type="submit" value="確認" />
-        </form>
-        <form action="Open.php" method="post">
-            <input type="submit" name="open" value="開獎頁">
         </form>
 
         </form>

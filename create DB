@@ -17,6 +17,37 @@ create table detail
     total int null,
     take int null,
     save int null,
+    play int null,
     result int null,
+    date timestamp
+) engine = InnoDB;
+
+create table gameResult
+(
+    id int auto_increment primary key,
+    one int null,
+    two int null,
+    three int null,
+    four int null,
+    five int null,
+    pay int null,
+    account char(100) null,
+    result char(100) null,
+    result1 char(100) null,
+    result2 char(100) null,
+    number int null,
+    date timestamp
+) engine = InnoDB;
+
+create table Result
+(
+    id int auto_increment primary key,
+    one int null,
+    two int null,
+    three int null,
+    four int null,
+    five int null,
+    starttime date,
+    endtime date,
     date timestamp
 ) engine = InnoDB;

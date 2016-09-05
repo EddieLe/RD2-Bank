@@ -2,12 +2,11 @@
 require_once 'MyPDO.php';
 session_start();
 
-function resultInsert()
+function comparison()
 {
     $myPdo = new MyPDO();
     $pdo = $myPdo->pdoConnect;
-
-    $sql = "INSERT INTO `Result`(`one`, `two`, `three`, `four`, `five`,`starttime`, `endtime`) 
+    $sql = "INSERT INTO `Result`(`one`, `two`, `three`, `four`, `five`,`starttime`, `endtime`)
       VALUES (:one, :two, :three, :four, :five, :starttime, :endtime)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':one' => $_POST['one'],
@@ -18,19 +17,16 @@ function resultInsert()
         ':starttime' => $_POST['start'],
         ':endtime' => $_POST['end']
     ]);
-}
-resultInsert();
-//header("location:Open.php");
-function comparison()
-{
-    $myPdo = new MyPDO();
-    $pdo = $myPdo->pdoConnect;
+    $number = $pdo->lastInsertId();
+
     $sql = "SELECT * FROM `gameResult`";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
+
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     }
+
     for ($i = 0; $i < count($data); $i++) {
         $time[] = strtotime($data[$i]['date']);
 
@@ -38,35 +34,42 @@ function comparison()
             $result[] = $data[$i];
         }
     }
+
     $oneResult = array($_POST['one'], $_POST['two'], $_POST['three']);
     $twoResult = array($_POST['two'], $_POST['three'], $_POST['four']);
     $threeResult = array($_POST['three'], $_POST['four'], $_POST['five']);
 
-    echo $_POST['one'], $_POST['two'], $_POST['three'], $_POST['four'], $_POST['five'];
+
     for ($i = 0; $i < count($result); $i++) {
-        echo $result[$i]['one'];
-//        var_dump(in_array($result[$i]['one'],$oneResult));
+
         if (in_array($result[$i]['one'],$oneResult) && in_array($result[$i]['two'],$oneResult) && in_array($result[$i]['three'],$oneResult)) {
-            $sql = "UPDATE `gameResult` SET `result`= '中前三' WHERE `id` = :id";
+            $sql = "UPDATE `gameResult` SET `result`= '中前三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id' => $result[$i]['id']]);
+            $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             $totalResult[] = $result[$i];
         }
         if (in_array($result[$i]['two'],$twoResult) && in_array($result[$i]['three'],$twoResult) && in_array($result[$i]['four'],$twoResult)) {
-            $sql = "UPDATE `gameResult` SET `result1`= '中中三' WHERE `id` = :id";
+            $sql = "UPDATE `gameResult` SET `result1`= '中中三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id' => $result[$i]['id']]);
+            $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             $totalResult[] = $result[$i];
         }
         if (in_array($result[$i]['three'],$threeResult) && in_array($result[$i]['four'],$threeResult) && in_array($result[$i]['five'],$threeResult)) {
-            $sql = "UPDATE `gameResult` SET `result2`= '中後三' WHERE `id` = :id";
+            $sql = "UPDATE `gameResult` SET `result2`= '中後三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id' => $result[$i]['id']]);
+            $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             $totalResult[] = $result[$i];
         }
     }
-var_dump($totalResult);
-    return $totalResult;
+    $sql = "SELECT * FROM `gameResult`";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':account' => $_SESSION['account']]);
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+
+    return $data;
+//    return $totalResult;
 }
 ?>
 
@@ -79,6 +82,7 @@ var_dump($totalResult);
     <table width="1000" border="1">
         <tr>
             <td>注單編號</td>
+            <td>開獎編號</td>
             <td>中獎人</td>
             <td>數字一</td>
             <td>數字二</td>
@@ -93,6 +97,7 @@ var_dump($totalResult);
         <?php for ($i = 0; $i < count($data); $i++) :?>
             <tr>
                 <td><?php echo $data[$i]['id']; ?></td>
+                <td><?php echo $data[$i]['number']; ?></td>
                 <td><?php echo $data[$i]['account']; ?></td>
                 <td><?php echo $data[$i]['one']; ?></td>
                 <td><?php echo $data[$i]['two']; ?></td>

@@ -24,6 +24,7 @@ function history()
 <table width="1000" border="1">
     <tr>
         <td>注單編號</td>
+        <td>開獎期數</td>
         <td>中獎人</td>
         <td>數字一</td>
         <td>數字二</td>
@@ -38,6 +39,7 @@ function history()
     <?php for ($i = 0; $i < count($data); $i++) :?>
         <tr>
             <td><?php echo $data[$i]['id']; ?></td>
+            <td><?php echo $data[$i]['number']; ?></td>
             <td><?php echo $data[$i]['account']; ?></td>
             <td><?php echo $data[$i]['one']; ?></td>
             <td><?php echo $data[$i]['two']; ?></td>

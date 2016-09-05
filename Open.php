@@ -31,6 +31,7 @@ function detail()
 }
 detail()
 ?>
+<!--readonly="readonly"-->
 <html>
     <head>
         <title>開獎頁</title>
@@ -40,11 +41,11 @@ detail()
         <form method="post" action="OpenResultInsert.php">
             <input type="date" name="start" value="" placeholder="2014-09-18" required>
             <input type="date" name="end" value="" placeholder="2014-09-18" required>
-            數字一: <input type="text" size="3" name="one" value="<?php echo $data[0];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字二：<input type="text" size="3" name="two" value="<?php echo $data[1];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字三：<input type="text" size="3" name="three" value="<?php echo $data[2];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字四：<input type="text" size="3" name="four" value="<?php echo $data[3];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字五：<input type="text" size="3" name="five" value="<?php echo $data[4];?>" readonly="readonly" required pattern="[0-9]{1}"/>
+            數字一: <input type="text" size="3" name="one" value="<?php echo $data[0];?>" required pattern="[0-9]{1}"/>
+            數字二：<input type="text" size="3" name="two" value="<?php echo $data[1];?>" required pattern="[0-9]{1}"/>
+            數字三：<input type="text" size="3" name="three" value="<?php echo $data[2];?>" required pattern="[0-9]{1}"/>
+            數字四：<input type="text" size="3" name="four" value="<?php echo $data[3];?>" required pattern="[0-9]{1}"/>
+            數字五：<input type="text" size="3" name="five" value="<?php echo $data[4];?>" required pattern="[0-9]{1}"/>
             <input type="submit" value="確認" />
         </form>
         <a href ="Game.php">上一頁</a>

@@ -59,9 +59,15 @@ if (isset($_POST['logout'])) {
             輸入金額: <input type="text" name="money" value="" />
             <input type="submit" value="確認" />
         </form>
+    <?php if ($_SESSION['account'] == 'root') {?>
+        <form action="Open.php" method="post">
+            <input type="submit" name="open" value="開獎頁">
+        </form>
+    <?php } else {?>
         <form action="Game.php" method="post">
             <input type="submit" name="logout" value="三字遊戲" />
         </form>
+    <?php } ?>
         <form action="" method="post">
             <input type="submit" name="logout" value="登出" />
         </form>
