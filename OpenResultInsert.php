@@ -2,6 +2,10 @@
 require_once 'MyPDO.php';
 session_start();
 
+if (!isset($_SESSION['account'])) {
+    header("location:SignIn.php");
+}
+
 function comparison()
 {
     $myPdo = new MyPDO();
@@ -61,15 +65,14 @@ function comparison()
             $totalResult[] = $result[$i];
         }
     }
-    $sql = "SELECT * FROM `gameResult`";
+    $sql = "SELECT * FROM `gameResult` WHERE `number` > 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':account' => $_SESSION['account']]);
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $row;
+        $dit[] = $row;
     }
 
-    return $data;
-//    return $totalResult;
+    return $dit;
 }
 ?>
 
