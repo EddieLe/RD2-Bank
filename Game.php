@@ -58,7 +58,6 @@ function detail()
         <form action="History.php" method="post">
             <input type="submit" name="open" value="歷史結果">
         </form>
-
         <table width="600" border="1">
             <tr>
                 <td>注單編號</td>

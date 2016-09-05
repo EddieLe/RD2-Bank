@@ -4,6 +4,7 @@ session_start();
 
 function gameInsert()
 {
+    $numArray = array($_POST['one'], $_POST['two'], $_POST['three'], $_POST['four'], $_POST['five']);
     $myPdo = new MyPDO();
     $pdo = $myPdo->pdoConnect;
 
@@ -23,13 +24,18 @@ function gameInsert()
         header("refresh:0, url=Game.php");
         exit;
     }
-    echo $_POST['one'];
-    echo $_POST['two'];
-    echo $_POST['three'];
-    echo $_POST['four'];
-    echo $_POST['five'];
-    echo $_SESSION['account'];
-    echo $_POST['pay'];
+    if (count(array_unique($numArray)) != count($numArray)) {
+        echo "<script> alert('輸入重複數字'); </script>";
+        header("refresh:0, url=Game.php");
+        exit;
+    }
+//    echo $_POST['one'];
+//    echo $_POST['two'];
+//    echo $_POST['three'];
+//    echo $_POST['four'];
+//    echo $_POST['five'];
+//    echo $_SESSION['account'];
+//    echo $_POST['pay'];
 //    exit;
 
     $sql = "INSERT INTO `gameResult`(`one`, `two`, `three`, `four`, `five`, `pay`, `account`) 
@@ -43,6 +49,9 @@ function gameInsert()
         ':pay' => $_POST['pay'],
         ':account' => $_SESSION['account']
         ]);
+    echo "<script> alert('下注成功'); </script>";
+    header("refresh:0, url=Game.php");
+    exit;
 }
 gameInsert();
 header("location:Game.php");
