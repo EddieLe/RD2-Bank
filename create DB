@@ -18,6 +18,7 @@ create table detail
     take int null,
     save int null,
     play int null,
+    win int null,
     result int null,
     date timestamp
 ) engine = InnoDB;
@@ -35,7 +36,7 @@ create table gameResult
     result char(100) null,
     result1 char(100) null,
     result2 char(100) null,
-    number int null,
+    number char(100) null,
     date timestamp
 ) engine = InnoDB;
 

@@ -72,8 +72,8 @@ function gameInsert()
     }
 
 
-    $sql = "INSERT INTO `gameResult`(`one`, `two`, `three`, `four`, `five`, `pay`, `result`, `account`, `result1`, `result2`) 
-      VALUES (:one, :two, :three, :four, :five, :pay, '無', :account, '無', '無')";
+    $sql = "INSERT INTO `gameResult`(`one`, `two`, `three`, `four`, `five`, `pay`, `result`, `account`, `result1`, `result2`, `number`) 
+      VALUES (:one, :two, :three, :four, :five, :pay, '無', :account, '無', '無', '未開獎')";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':one' => $_POST['one'],
         ':two' => $_POST['two'],

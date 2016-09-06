@@ -77,6 +77,7 @@ if (isset($_POST['logout'])) {
             <th>提款</th>
             <th>存款</th>
             <th>下注</th>
+            <th>贏額</th>
             <th>餘額</th>
         </tr>
         <?php $data = detail();?>
@@ -86,6 +87,7 @@ if (isset($_POST['logout'])) {
                 <th><?php echo $data[$i]['take'] ?></th>
                 <th><?php echo $data[$i]['save'] ?></th>
                 <th><?php echo $data[$i]['play'] ?></th>
+                <th><?php echo $data[$i]['win'] ?></th>
                 <th><?php echo $data[$i]['result'] ?></th>
             </tr>
         <?php endfor; ?>
