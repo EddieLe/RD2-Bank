@@ -5,7 +5,7 @@ session_start();
 if (!isset($_SESSION['account'])) {
     header("location:SignIn.php");
 }
-
+//隨機產生不重複亂數
 function result()
 {
     for ($i = 0; $i < 10; $i++) {

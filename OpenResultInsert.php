@@ -57,6 +57,7 @@ function comparison()
         ':starttime' => $_POST['start'],
         ':endtime' => $_POST['end']
     ]);
+    //找出最後一筆開獎好寫入明細
     $number = $pdo->lastInsertId();
 
     $sql = "SELECT * FROM `gameResult`";
@@ -80,25 +81,46 @@ function comparison()
     $threeResult = array($_POST['three'], $_POST['four'], $_POST['five']);
 
     for ($i = 0; $i < count($result); $i++) {
+        //先寫入有判斷區間開獎值
         $sql = "UPDATE `gameResult` SET `number` = '沒中獎' WHERE `id` = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id' => $result[$i]['id']]);
 
-        if (in_array($result[$i]['one'],$oneResult) && in_array($result[$i]['two'],$oneResult) && in_array($result[$i]['three'],$oneResult)) {
+        //判斷由沒有全部一致
+        if ($result[$i]['one'] == $_POST['one'] && $result[$i]['two'] == $_POST['two'] && $result[$i]['three'] == $_POST['three']) {
+            $sql = "UPDATE `gameResult` SET `result`= '中前三全中', `number` = :numbers WHERE `id` = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
+            back(($result[$i]['pay']) * 3, $result[$i]['account']);
+
+            //判斷是否存在陣列
+        } elseif (in_array($result[$i]['one'],$oneResult) && in_array($result[$i]['two'],$oneResult) && in_array($result[$i]['three'],$oneResult)) {
             $sql = "UPDATE `gameResult` SET `result`= '中前三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             back($result[$i]['pay'], $result[$i]['account']);
 
         }
-        if (in_array($result[$i]['two'],$twoResult) && in_array($result[$i]['three'],$twoResult) && in_array($result[$i]['four'],$twoResult)) {
+
+        if ($result[$i]['two'] == $_POST['two'] && $result[$i]['three'] == $_POST['three'] && $result[$i]['four'] == $_POST['four']) {
+            $sql = "UPDATE `gameResult` SET `result1`= '中中三全中', `number` = :numbers WHERE `id` = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
+            back(($result[$i]['pay']) * 3, $result[$i]['account']);
+        } elseif (in_array($result[$i]['two'],$twoResult) && in_array($result[$i]['three'],$twoResult) && in_array($result[$i]['four'],$twoResult)) {
             $sql = "UPDATE `gameResult` SET `result1`= '中中三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             back($result[$i]['pay'],$result[$i]['account']);
 
         }
-        if (in_array($result[$i]['three'],$threeResult) && in_array($result[$i]['four'],$threeResult) && in_array($result[$i]['five'],$threeResult)) {
+
+        if ($result[$i]['three'] == $_POST['three'] && $result[$i]['four'] == $_POST['four'] && $result[$i]['five'] == $_POST['five']) {
+            $sql = "UPDATE `gameResult` SET `result2`= '中後三全中', `number` = :numbers WHERE `id` = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
+            back(($result[$i]['pay']) * 3, $result[$i]['account']);
+        } elseif (in_array($result[$i]['three'],$threeResult) && in_array($result[$i]['four'],$threeResult) && in_array($result[$i]['five'],$threeResult)) {
             $sql = "UPDATE `gameResult` SET `result2`= '中後三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
@@ -106,6 +128,7 @@ function comparison()
 
         }
     }
+    //撈出有中獎明細
     $sql = "SELECT * FROM `gameResult` WHERE `number` > 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':account' => $_SESSION['account']]);
