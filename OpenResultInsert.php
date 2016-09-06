@@ -1,6 +1,6 @@
 <?php
 require_once 'MyPDO.php';
-ini_set('display_errors', true);
+//ini_set('display_errors', true);
 session_start();
 
 if (!isset($_SESSION['account'])) {
@@ -80,27 +80,30 @@ function comparison()
     $threeResult = array($_POST['three'], $_POST['four'], $_POST['five']);
 
     for ($i = 0; $i < count($result); $i++) {
+        $sql = "UPDATE `gameResult` SET `number` = '沒中獎' WHERE `id` = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id' => $result[$i]['id']]);
 
         if (in_array($result[$i]['one'],$oneResult) && in_array($result[$i]['two'],$oneResult) && in_array($result[$i]['three'],$oneResult)) {
             $sql = "UPDATE `gameResult` SET `result`= '中前三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             back($result[$i]['pay'], $result[$i]['account']);
-//            $totalResult[] = $result[$i];
+
         }
         if (in_array($result[$i]['two'],$twoResult) && in_array($result[$i]['three'],$twoResult) && in_array($result[$i]['four'],$twoResult)) {
             $sql = "UPDATE `gameResult` SET `result1`= '中中三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             back($result[$i]['pay'],$result[$i]['account']);
-//            $totalResult[] = $result[$i];
+
         }
         if (in_array($result[$i]['three'],$threeResult) && in_array($result[$i]['four'],$threeResult) && in_array($result[$i]['five'],$threeResult)) {
             $sql = "UPDATE `gameResult` SET `result2`= '中後三', `number` = :numbers WHERE `id` = :id";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['id' => $result[$i]['id'], ':numbers' => $number]);
             back($result[$i]['pay'],$result[$i]['account']);
-//            $totalResult[] = $result[$i];
+
         }
     }
     $sql = "SELECT * FROM `gameResult` WHERE `number` > 0";
