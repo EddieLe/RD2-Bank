@@ -29,28 +29,37 @@ function detail()
 
     return $data;
 }
-detail()
 ?>
 
 <html>
     <head>
         <title>開獎頁</title>
+        <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+        <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="jqueryui/style.css">
     </head>
     <body>
     <?php $data = result();?>
         <form method="post" action="OpenResultInsert.php">
-            <input type="text" name="start" value="" placeholder="2014-09-18" required>
-            <input type="text" name="end" value="" placeholder="2014-09-18" required>
-            數字一: <input type="text" size="3" name="one" value="<?php echo $data[0];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字二：<input type="text" size="3" name="two" value="<?php echo $data[1];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字三：<input type="text" size="3" name="three" value="<?php echo $data[2];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字四：<input type="text" size="3" name="four" value="<?php echo $data[3];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-            數字五：<input type="text" size="3" name="five" value="<?php echo $data[4];?>" readonly="readonly" required pattern="[0-9]{1}"/>
-<!--            數字一: <input type="text" size="3" name="one" value="--><?php //echo $data[0];?><!--" required pattern="[0-9]{1}"/>-->
-<!--            數字二：<input type="text" size="3" name="two" value="--><?php //echo $data[1];?><!--" required pattern="[0-9]{1}"/>-->
-<!--            數字三：<input type="text" size="3" name="three" value="--><?php //echo $data[2];?><!--" required pattern="[0-9]{1}"/>-->
-<!--            數字四：<input type="text" size="3" name="four" value="--><?php //echo $data[3];?><!--" required pattern="[0-9]{1}"/>-->
-<!--            數字五：<input type="text" size="3" name="five" value="--><?php //echo $data[4];?><!--" required pattern="[0-9]{1}"/>-->
+            開獎區間 : <input id="datepicker1" type="text" name="start" value="" placeholder="2014-09-18" required/>
+            ～ <input id="datepicker2" type="text" name="end" value="" placeholder="2014-09-18" required/>
+            <script language="JavaScript">
+                $(document).ready(function(){
+                    $("#datepicker1").datepicker();
+                    $("#datepicker2").datepicker({firstDay: 1});
+                });
+            </script>
+<!--            數字一: <input type="text" size="3" name="one" value="--><?php //echo $data[0];?><!--" readonly="readonly" required pattern="[0-9]{1}"/>-->
+<!--            數字二：<input type="text" size="3" name="two" value="--><?php //echo $data[1];?><!--" readonly="readonly" required pattern="[0-9]{1}"/>-->
+<!--            數字三：<input type="text" size="3" name="three" value="--><?php //echo $data[2];?><!--" readonly="readonly" required pattern="[0-9]{1}"/>-->
+<!--            數字四：<input type="text" size="3" name="four" value="--><?php //echo $data[3];?><!--" readonly="readonly" required pattern="[0-9]{1}"/>-->
+<!--            數字五：<input type="text" size="3" name="five" value="--><?php //echo $data[4];?><!--" readonly="readonly" required pattern="[0-9]{1}"/>-->
+            數字一: <input type="text" size="3" name="one" value="<?php echo $data[0];?>" required pattern="[0-9]{1}"/>
+            數字二：<input type="text" size="3" name="two" value="<?php echo $data[1];?>" required pattern="[0-9]{1}"/>
+            數字三：<input type="text" size="3" name="three" value="<?php echo $data[2];?>" required pattern="[0-9]{1}"/>
+            數字四：<input type="text" size="3" name="four" value="<?php echo $data[3];?>" required pattern="[0-9]{1}"/>
+            數字五：<input type="text" size="3" name="five" value="<?php echo $data[4];?>" required pattern="[0-9]{1}"/>
             <input type="submit" value="確認" />
         </form>
         <a href ="Game.php">上一頁</a>

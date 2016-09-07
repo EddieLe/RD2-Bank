@@ -44,6 +44,11 @@ function back($pay, $account)
 
 function comparison()
 {
+    $s = explode("/", $_POST['start']);
+    $e = explode("/", $_POST['end']);
+    $_POST['start'] = $s[2] . "-" . $s[0] . "-" . $s[1];
+    $_POST['end'] = $e[2] . "-" . $e[0] . "-" . $e[1];
+
     $myPdo = new MyPDO();
     $pdo = $myPdo->pdoConnect;
     $sql = "INSERT INTO `Result`(`one`, `two`, `three`, `four`, `five`,`starttime`, `endtime`)
